@@ -12,11 +12,6 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module" module-name="aop" />
-    <orderEntry type="module" module-name="beans" />
-    <orderEntry type="module" module-name="core" />
-    <orderEntry type="module" module-name="expression" />
-    <orderEntry type="module" module-name="instrument" />
     <orderEntry type="library" name="AOP Alliance" level="project" />
     <orderEntry type="library" name="ASM" level="project" />
     <orderEntry type="library" name="AspectJ" level="project" />

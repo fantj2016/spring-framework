@@ -17,12 +17,6 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module" module-name="aop" />
-    <orderEntry type="module" module-name="beans" />
-    <orderEntry type="module" module-name="context" />
-    <orderEntry type="module" module-name="core" />
-    <orderEntry type="module" module-name="jdbc" />
-    <orderEntry type="module" module-name="transaction" />
     <orderEntry type="library" name="Commons Collections" level="project" />
     <orderEntry type="library" name="Commons Logging" level="project" />
     <orderEntry type="library" name="EasyMock" level="project" />
@@ -137,6 +131,7 @@
     <orderEntry type="library" name="Maven: oro:oro:2.0.8" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.15" level="project" />
     <orderEntry type="module" module-name="beans" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="module" module-name="context" />
     <orderEntry type="module" module-name="expression" />
     <orderEntry type="module" module-name="spring-asm" />

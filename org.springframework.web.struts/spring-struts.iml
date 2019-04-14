@@ -31,6 +31,7 @@
     <orderEntry type="library" name="Maven: xalan:xalan:2.5.1" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.7.0" level="project" />
     <orderEntry type="module" module-name="beans" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="module" module-name="context" />
     <orderEntry type="module" module-name="expression" />
     <orderEntry type="module" module-name="spring-asm" />

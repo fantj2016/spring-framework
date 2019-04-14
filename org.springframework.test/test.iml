@@ -17,15 +17,6 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module" module-name="beans" />
-    <orderEntry type="module" module-name="context" />
-    <orderEntry type="module" module-name="core" />
-    <orderEntry type="module" module-name="jdbc" />
-    <orderEntry type="module" module-name="orm" />
-    <orderEntry type="module" module-name="transaction" />
-    <orderEntry type="module" module-name="web" />
-    <orderEntry type="module" module-name="web-portlet" />
-    <orderEntry type="module" module-name="web-servlet" />
     <orderEntry type="library" name="AspectJ" level="project" />
     <orderEntry type="library" name="Commons Logging" level="project" />
     <orderEntry type="library" name="EasyMock" level="project" />
@@ -152,6 +143,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: hsqldb:hsqldb:1.8.0.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
     <orderEntry type="module" module-name="beans" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="module" module-name="context" />
     <orderEntry type="module" module-name="expression" />
     <orderEntry type="module" module-name="spring-asm" />

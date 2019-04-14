@@ -402,16 +402,23 @@ public class AnnotationMethodHandlerAdapter extends WebContentGenerator
 		return invokeHandlerMethod(request, response, handler);
 	}
 
+	/**
+	 * 获取处理请求的方法,执行并返回结果视图
+	 */
 	protected ModelAndView invokeHandlerMethod(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
+	    // 1.获取方法解析器
 		ServletHandlerMethodResolver methodResolver = getMethodResolver(handler);
+		// 2.解析request中的url,获取处理request的方法
 		Method handlerMethod = methodResolver.resolveHandlerMethod(request);
+		// 3. 方法调用器
 		ServletHandlerMethodInvoker methodInvoker = new ServletHandlerMethodInvoker(methodResolver);
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
 		ExtendedModelMap implicitModel = new BindingAwareModelMap();
-
+		// 4.执行方法
 		Object result = methodInvoker.invokeHandlerMethod(handlerMethod, handler, webRequest, implicitModel);
+		// 5. 封装成mv视图
 		ModelAndView mav =
 				methodInvoker.getModelAndView(handlerMethod, handler.getClass(), result, implicitModel, webRequest);
 		methodInvoker.updateModelAttributes(handler, (mav != null ? mav.getModel() : null), implicitModel, webRequest);

@@ -100,6 +100,7 @@ public class DefaultAnnotationHandlerMapping extends AbstractDetectingUrlHandler
 
 
 	/**
+     * 获取@RequestMaping注解中的url
 	 * Checks for presence of the {@link org.springframework.web.bind.annotation.RequestMapping}
 	 * annotation on the handler class and on any of its methods.
 	 */
@@ -107,34 +108,40 @@ public class DefaultAnnotationHandlerMapping extends AbstractDetectingUrlHandler
 	protected String[] determineUrlsForHandler(String beanName) {
 		ApplicationContext context = getApplicationContext();
 		Class<?> handlerType = context.getType(beanName);
+		// 获取beanName 上的requestMapping
 		RequestMapping mapping = context.findAnnotationOnBean(beanName, RequestMapping.class);
 		if (mapping != null) {
-			// @RequestMapping found at type level
+            // 类上面有@RequestMapping 注解
 			this.cachedMappings.put(handlerType, mapping);
 			Set<String> urls = new LinkedHashSet<String>();
+			// controller 的映射 url
 			String[] typeLevelPatterns = mapping.value();
 			if (typeLevelPatterns.length > 0) {
-				// @RequestMapping specifies paths at type level
+                // 获取Controller 方法上的@RequestMapping
 				String[] methodLevelPatterns = determineUrlsForHandlerMethods(handlerType);
 				for (String typeLevelPattern : typeLevelPatterns) {
 					if (!typeLevelPattern.startsWith("/")) {
 						typeLevelPattern = "/" + typeLevelPattern;
 					}
 					for (String methodLevelPattern : methodLevelPatterns) {
+						// controller的映射url+方法映射的url
 						String combinedPattern = getPathMatcher().combine(typeLevelPattern, methodLevelPattern);
+						// 保存到set集合中
 						addUrlsForPath(urls, combinedPattern);
 					}
 					addUrlsForPath(urls, typeLevelPattern);
 				}
+				// 以数组形式返回controller上的所有url
 				return StringUtils.toStringArray(urls);
 			}
 			else {
-				// actual paths specified by @RequestMapping at method level
+				// controller上的@RequestMapping映射url为空串,直接找方法的映射url
 				return determineUrlsForHandlerMethods(handlerType);
 			}
 		}
+		// controller上没@RequestMapping注解
 		else if (AnnotationUtils.findAnnotation(handlerType, Controller.class) != null) {
-			// @RequestMapping to be introspected at method level
+			// 获取controller中方法上的映射url
 			return determineUrlsForHandlerMethods(handlerType);
 		}
 		else {

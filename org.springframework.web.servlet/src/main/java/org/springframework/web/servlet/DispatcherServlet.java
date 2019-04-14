@@ -680,6 +680,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 将DispatcherServlet特定的请求属性和委托 公开给{@link #doDispatch}以进行实际调度。
 	 * Exposes the DispatcherServlet-specific request attributes and delegates to {@link #doDispatch}
 	 * for the actual dispatching.
 	 */
@@ -724,6 +725,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 控制请求转发
 	 * Process the actual dispatching to the handler.
 	 * <p>The handler will be obtained by applying the servlet's HandlerMappings in order.
 	 * The HandlerAdapter will be obtained by querying the servlet's installed HandlerAdapters
@@ -740,20 +742,25 @@ public class DispatcherServlet extends FrameworkServlet {
 		int interceptorIndex = -1;
 
 		try {
+
 			ModelAndView mv;
 			boolean errorView = false;
 
 			try {
+			    // 1. 检查是否是上传文件
 				processedRequest = checkMultipart(request);
 
 				// Determine handler for the current request.
+                // 2. 获取handler处理器，返回的mappedHandler封装了handlers和interceptors
 				mappedHandler = getHandler(processedRequest, false);
 				if (mappedHandler == null || mappedHandler.getHandler() == null) {
+				    // 返回404
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
 				// Apply preHandle methods of registered interceptors.
+                // 获取HandlerInterceptor的预处理方法
 				HandlerInterceptor[] interceptors = mappedHandler.getInterceptors();
 				if (interceptors != null) {
 					for (int i = 0; i < interceptors.length; i++) {
@@ -767,7 +774,9 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Actually invoke the handler.
+                // 3. 获取handler适配器 Adapter
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
+				// 4. 实际的处理器处理并返回 ModelAndView 对象
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				// Do we need view name translation?
@@ -775,10 +784,11 @@ public class DispatcherServlet extends FrameworkServlet {
 					mv.setViewName(getDefaultViewName(request));
 				}
 
-				// Apply postHandle methods of registered interceptors.
+				// HandlerInterceptor 后处理
 				if (interceptors != null) {
 					for (int i = interceptors.length - 1; i >= 0; i--) {
 						HandlerInterceptor interceptor = interceptors[i];
+						// 结束视图对象处理
 						interceptor.postHandle(processedRequest, response, mappedHandler.getHandler(), mv);
 					}
 				}
@@ -808,6 +818,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 
 			// Trigger after-completion for successful outcome.
+			// 请求成功响应之后的方法
 			triggerAfterCompletion(mappedHandler, interceptorIndex, processedRequest, response, null);
 		}
 

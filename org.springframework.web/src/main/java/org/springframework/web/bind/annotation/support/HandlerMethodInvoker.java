@@ -160,10 +160,12 @@ public class HandlerMethodInvoker {
 					implicitModel.addAttribute(attrName, attrValue);
 				}
 			}
+			// 解析该方法上的参数
 			Object[] args = resolveHandlerArguments(handlerMethodToInvoke, handler, webRequest, implicitModel);
 			if (debug) {
 				logger.debug("Invoking request handler method: " + handlerMethodToInvoke);
 			}
+			// 真正调用的方法
 			return doInvokeMethod(handlerMethodToInvoke, handler, args);
 		}
 		catch (IllegalStateException ex) {
@@ -175,10 +177,12 @@ public class HandlerMethodInvoker {
 	@SuppressWarnings("unchecked")
 	private Object[] resolveHandlerArguments(Method handlerMethod, Object handler,
 			NativeWebRequest webRequest, ExtendedModelMap implicitModel) throws Exception {
-
+		// 拿到所有的参数类型
 		Class[] paramTypes = handlerMethod.getParameterTypes();
+		// 创建一个空数组，用来存放解析出来的参数
 		Object[] args = new Object[paramTypes.length];
 
+		// 遍历所有参数类型
 		for (int i = 0; i < args.length; i++) {
 			MethodParameter methodParam = new MethodParameter(handlerMethod, i);
 			methodParam.initParameterNameDiscovery(this.parameterNameDiscoverer);
@@ -193,9 +197,11 @@ public class HandlerMethodInvoker {
 			String defaultValue = null;
 			boolean validate = false;
 			int found = 0;
+			// 获取到所有方法中的注解
 			Annotation[] paramAnns = methodParam.getParameterAnnotations();
-
+			// 遍历注解
 			for (Annotation paramAnn : paramAnns) {
+				// 获取相应注解的值， found 用来计数有几个注解
 				if (RequestParam.class.isInstance(paramAnn)) {
 					RequestParam requestParam = (RequestParam) paramAnn;
 					paramName = requestParam.value();
@@ -243,7 +249,7 @@ public class HandlerMethodInvoker {
 				throw new IllegalStateException("Handler parameter annotations are exclusive choices - " +
 						"do not specify more than one such annotation on the same parameter: " + handlerMethod);
 			}
-
+			// 如果没有注解
 			if (found == 0) {
 				Object argValue = resolveCommonArgument(methodParam, webRequest);
 				if (argValue != WebArgumentResolver.UNRESOLVED) {
@@ -254,6 +260,7 @@ public class HandlerMethodInvoker {
 				}
 				else {
 					Class paramType = methodParam.getParameterType();
+					// 将方法声明中的Map和Model参数,放到request中,用于将数据放到request中带回页面
 					if (Model.class.isAssignableFrom(paramType) || Map.class.isAssignableFrom(paramType)) {
 						args[i] = implicitModel;
 					}
@@ -272,7 +279,7 @@ public class HandlerMethodInvoker {
 					}
 				}
 			}
-
+			// 从request中取值,并进行赋值操作
 			if (paramName != null) {
 				args[i] = resolveRequestParam(paramName, required, defaultValue, methodParam, webRequest, handler);
 			}
@@ -303,7 +310,7 @@ public class HandlerMethodInvoker {
 				implicitModel.putAll(binder.getBindingResult().getModel());
 			}
 		}
-
+		// 返回参数值数组
 		return args;
 	}
 
@@ -705,8 +712,10 @@ public class HandlerMethodInvoker {
 	}
 
 	private Object doInvokeMethod(Method method, Object target, Object[] args) throws Exception {
+		// 将一个方法设置为可调用，主要针对private方法
 		ReflectionUtils.makeAccessible(method);
 		try {
+			// 反射调用
 			return method.invoke(target, args);
 		}
 		catch (InvocationTargetException ex) {
